@@ -2,42 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Job
+class Job extends Model
 {
-    public static function all(): array
+    use HasFactory;
+
+    //by default, if you make an eloquent model, model name is singular form of the table name.
+    //But since there's a clash with table name as table 'jobs' already exists, we have to name our table something different in the migration
+    //so here as well we need to specify the unique table name
+    protected $table = 'job_listings';
+    protected $fillable = ['title', 'salary']; // allows mass assignment via eg. App\Models\Job::create(['title'=>'Director','salary'=>'$350000'])
+
+    public function employer()
     {
-        return [
-            [
-                'id' => 1,
-                'title' => 'Director',
-                'salary' => '$50000'
-            ],
-            [
-                'id' => 2,
-                'title' => 'Programmer',
-                'salary' => '$10000'
-            ],
-            [
-                'id' => 3,
-                'title' => 'Teacher',
-                'salary' => '$40000'
-            ]
-        ];
+        return $this->belongsTo(Employer::class);
     }
 
-    public static function find(int $id): array
+    public function tags()
     {
-        //can also say Job:all() instead of static:all() but we're already in job class
-        $job = Arr::first(static::all(), fn ($job) => $job['id'] == $id);
-
-        if (!$job) {
-            // if we don't do this, this script would return null if no such job was found for the id.
-            abort(404);
-        }
-
-        return $job;
-
+        return $this->belongsToMany(Tag::class, foreignPivotKey: "job_listing_id"); // we need to mention the foreignPivotKey becuase it's expecting a column name of job_id but we couldn't use it because Laravel has a table with job_id already in it.
     }
 }
