@@ -10,7 +10,9 @@ Route::get('/', function () {
 Route::get('/jobs', function () {
     //$jobs = Job::all(); //prevent N+1 database querying problem; when it's used in a context where each Job item requires additional data, especially if it's loading related models within a loop.
     //We can prevent lazy loading entirely in the application by going to Appserviceprovider.php and disabling it, so anytime any code in your application tries to lazy load anything, it'll give an error saying lazy loading is disabled so you can go back and tweak that code to make it only eager load.
-    $jobs = Job::with('employer')->get();
+    $jobs = Job::with('employer')->paginate(3);
+    //simplePaginate saves on calculating how many pages there are- useful if many entries exist.
+    //cursorPaginate makes url gibberish
 
     return view('jobs', [
         'jobs' => $jobs
