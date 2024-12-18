@@ -13,7 +13,9 @@ class Job extends Model
     //But since there's a clash with table name as table 'jobs' already exists, we have to name our table something different in the migration
     //so here as well we need to specify the unique table name
     protected $table = 'job_listings';
-    protected $fillable = ['title', 'salary']; // allows mass assignment via eg. App\Models\Job::create(['title'=>'Director','salary'=>'$350000'])
+    // protected $fillable = ['title', 'salary', 'employer_id']; // allows mass assignment via eg. App\Models\Job::create(['title'=>'Director','salary'=>'$350000'])
+    //instead of whitelisting columns, you can blacklist columns from being mass assigned. if left empty, that'll mean no column is blacklisted.
+    protected $guarded = [];
 
     public function employer()
     {
