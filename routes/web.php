@@ -28,9 +28,12 @@ Route::get('/jobs/create', function () {
 
 // Shows a job. Since it's a wildcard, it's at the bottom of all jobs::GET routes
 // Wildcard routes should be at the bottom
-Route::get('/jobs/{id}', function ($id) {
-    $job = Job::find($id);
+Route::get('/jobs/{job}', function (Job $job) {
+    // for laravel to interpret it as an ID, wildcard and parameter name to be identical because that is interpreted as {job:id}
+    // now it can just be job. See: https://laracasts.com/series/30-days-to-learn-laravel-11/episodes/19
+    // $job = Job::find($id);
     return view('jobs.show', ['job' => $job]);
+
 });
 
 // Persist a job in the database
@@ -51,22 +54,23 @@ Route::post('/jobs', function () {
 });
 
 // Edit a job
-Route::get('/jobs/{id}/edit', function ($id) {
-    $job = Job::find($id);
+Route::get('/jobs/{job}/edit', function (Job $job) {
+    // $job = Job::find($id);
     return view('jobs.edit', ['job' => $job]);
 });
 
 //Update a job
-Route::patch('/jobs/{id}', function ($id) {
+Route::patch('/jobs/{job}', function (Job $job) {
+    // authorize (on hold...)
+
     //validate
     request()->validate([
         'title' => ['required','min:3'],
         'salary' => ['required']
     ]);
-    // authorize (on hold...)
 
     //get the job to update
-    $job = Job::findOrFail($id); // else there'd be a problem if the job didn't exist and find returned null then we called update on it.
+    // $job = Job::findOrFail($id); // else there'd be a problem if the job didn't exist and find returned null then we called update on it.
 
     //update the job
     $job->update([
@@ -84,11 +88,13 @@ Route::patch('/jobs/{id}', function ($id) {
 });
 
 // Destroy
-Route::delete('/jobs/{id}', function ($id) {
-    //authorize
+Route::delete('/jobs/{job}', function (Job $job) {
+    // authorize
 
     // delete
-    Job::findOrFail($id)->delete(); // else there'd be a problem if the job didn't exist and find returned null then we called update on it.
+    $job->delete();
+
+    // Job::findOrFail($id)->delete(); // else there'd be a problem if the job didn't exist and find returned null then we called update on it. // not using this anymore as we're calling object Job
 
     //alternative
     // $job = Job::findOrFail($id)->delete();
