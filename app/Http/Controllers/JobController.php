@@ -58,7 +58,7 @@ class JobController extends Controller
         //     abort(403);
         // }
 
-        Gate::authorize('edit-job', $job);
+        // Gate::authorize('edit-job', $job); // Moved to policy
 
         // $job = Job::find($id);
         return view('jobs.edit', ['job' => $job]);
