@@ -29,9 +29,10 @@ class AppServiceProvider extends ServiceProvider
         // export the pagination styles via php artisan vendor:publish and choose laravel-pagination
         // Paginator::useBootstrapFive(); //default is tailwind.
 
-        Gate::define('edit-job', function (User $user, Job $job) {
-            // see if the user responsible for the job is the same as the user currently signed in.
-            return $job->employer->user->is($user);
-        });
+        // Moved to JobPolicy
+        // Gate::define('edit-job', function (User $user, Job $job) {
+        //     // see if the user responsible for the job is the same as the user currently signed in.
+        //     return $job->employer->user->is($user);
+        // });
     }
 }
