@@ -38,6 +38,10 @@ class JobPosted extends Mailable
      */
     public function content(): Content
     {
+        // use something like program 'supervisor' or in the command line: php artisan queue:work to execute the queue
+        // once started, it'll always be running
+        // once you make a change to the code, restart the queueworker (or just use php artisan queue:listen) as everything will have been loaded into memory
+        // so we need to get rid of that and start fresh.
         return new Content(
             view: 'mail.job-posted',
         );

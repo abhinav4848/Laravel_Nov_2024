@@ -6,7 +6,9 @@
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<meta http-equiv="X-UA-Compatible" content="ie=edge">
 				<title> Page</title>
-				<script src="https://cdn.tailwindcss.com"></script>
+				@vite(['resources/js/app.js', 'resources/css/app.css'])
+				{{-- if calling the css from the app.js, then remove calling it from here --}}
+				{{-- @vite(['resources/js/app.js']) --}}
 		</head>
 
 		<body class="h-full">
